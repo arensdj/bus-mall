@@ -16,20 +16,6 @@ function Image(name, filePath, description) {
   this.numberOfTimesClicked = 0;
   this.numberOfTimesDisplayed = 0;
   Image.allImages.push(this);
-  this.imageClicked = function() {
-    this.numberOfTimesClicked++;
-    selectionCounter++;
-
-    // Clear previousDisplayedImages array.
-    previousDisplayedImages = [];
-
-    // Push images just displayed onto previousDislayedImages array.
-    previousDisplayedImages.push(Image.imgElement1);
-    previousDisplayedImages.push(Image.imgElement2);
-    previousDisplayedImages.push(Image.imgElement3);
-
-    Image.renderImages();
-  };
   this.imageDisplayed = function() {
     this.numberOfTimesDisplayed++;
   };
@@ -58,6 +44,23 @@ new Image('usb', '../img/usb.gif', 'USB lizard tail.');
 new Image('water-can', '../img/water-can.jpg', 'Curved watering can.');
 new Image('wine-glass', '../img/wine-glass.jpg', 'Side way wine glass.');
 
+Image.prototype.imageClicked = function() {
+  this.numberOfTimesClicked++;
+  selectionCounter++;
+
+  // console.log('Incremented selectionCounter: ' + selectionCounter);
+
+  // Clear previousDisplayedImages array.
+  previousDisplayedImages = [];
+
+  // Push images just displayed onto previousDislayedImages array.
+  previousDisplayedImages.push(Image.imgElement1);
+  previousDisplayedImages.push(Image.imgElement2);
+  previousDisplayedImages.push(Image.imgElement3);
+
+  Image.renderImages();
+};
+
 // Randomly generate a number
 Image.randomNum = function() {
   var random = Math.random() * Image.allImages.length;
@@ -75,7 +78,6 @@ Image.getImageNotPreviouslyDisplayed = function() {
     //Check that image1 is not in previously displayed images array.
     for(var i = 0; i < previousDisplayedImages.length; i++) {
       if(randomImage.filePath === previousDisplayedImages[i].filePath) {
-      //if(randomImage1.filePath === previousDisplayedImages[i].filePath) {
         randomIndex = Image.randomNum();
         randomImage = Image.allImages[randomIndex];
         i = 0; // Start over at the beginning of array
@@ -93,50 +95,6 @@ Image.renderImages = function() {
   var randomImage1 = Image.getImageNotPreviouslyDisplayed();
   var randomImage2 = Image.getImageNotPreviouslyDisplayed();
   var randomImage3 = Image.getImageNotPreviouslyDisplayed();
-  
-  // var randomIndex = Image.randomNum();
-  // var randomImage1 = Image.allImages[randomIndex];
-
-  // if(previousDisplayedImages.length > 0) {
-  //   //Check that image1 is not in previously displayed images array.
-  //   for(var i = 0; i < previousDisplayedImages.length; i++) {
-  //     if(randomImage1.filePath === previousDisplayedImages[i].filePath) {
-  //     //if(randomImage1.filePath === previousDisplayedImages[i].filePath) {
-  //       randomIndex = Image.randomNum();
-  //       randomImage1 = Image.allImages[randomIndex];
-  //       i = 0; // Start over at the beginning of array
-  //     }
-  //   } 
-  // } 
-
-  // randomIndex = Image.randomNum();
-  // var randomImage2 = Image.allImages[randomIndex];
-  // if(previousDisplayedImages.length > 0) {
-  //   //Check that image1 is not in previously displayed images array.
-  //   for(i = 0; i < previousDisplayedImages.length; i++) {
-  //     if(randomImage2.filePath === previousDisplayedImages[i].filePath) {
-  //     //if(randomImage1.filePath === previousDisplayedImages[i].filePath) {
-  //       randomIndex = Image.randomNum();
-  //       randomImage2 = Image.allImages[randomIndex];
-  //       i = 0; // Start over at the beginning of array
-  //     }
-  //   } 
-  // } 
-
-
-  // randomIndex = Image.randomNum();
-  // var randomImage3 = Image.allImages[randomIndex];
-  // if(previousDisplayedImages.length > 0) {
-  //   //Check that image1 is not in previously displayed images array.
-  //   for(i = 0; i < previousDisplayedImages.length; i++) {
-  //     if(randomImage3.filePath === previousDisplayedImages[i].filePath) {
-  //     //if(randomImage1.filePath === previousDisplayedImages[i].filePath) {
-  //       randomIndex = Image.randomNum();
-  //       randomImage3 = Image.allImages[randomIndex];
-  //       i = 0; // Start over at the beginning of array
-  //     }
-  //   } 
-  // } 
 
   // Now check for duplicates.
   var done = false;
@@ -164,12 +122,26 @@ Image.renderImages = function() {
   randomImage1.numberOfTimesDisplayed++;
   randomImage2.numberOfTimesDisplayed++;
   randomImage3.numberOfTimesDisplayed++;
+
+  console.log('Just rendedred images.');
 };
 
 Image.renderImages();
 
+if(previousDisplayedImages.length == 0) {
+  previousDisplayedImages.push(Image.imgElement1);
+  previousDisplayedImages.push(Image.imgElement2);
+  previousDisplayedImages.push(Image.imgElement3);
+}
+
+if(selectionCounter == 25) {
+  Image.imgElement1.removeEventListener('click', Image.imageClicked);
+  Image.imgElement2.removeEventListener('click', Image.imageClicked);
+  Image.imgElement3.removeEventListener('click', Image.imageClicked);
+}
+
 Image.imgElement1.addEventListener('click', Image.imageClicked);
 Image.imgElement2.addEventListener('click', Image.imageClicked);
-// Image.renderImages();
 Image.imgElement3.addEventListener('click', Image.imageClicked);
-// Image.renderImages();
+
+//Do calculations
