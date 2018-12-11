@@ -1,0 +1,12 @@
+body {
+  clear: all;
+}
+.image-display {
+  float: left;
+  margin-left: 25px;
+}
+ul li {
+  list-style: none;
+  display: inline-block;
+  margin: 35px 35px 35px 0px;
+}
