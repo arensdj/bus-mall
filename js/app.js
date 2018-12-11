@@ -126,41 +126,41 @@ Image.renderImages = function() {
   console.log('Just rendedred images.');
 };
 
-//Image.renderImages();
+Image.renderImages();
 
-// if(previousDisplayedImages.length == 0) {
-//   previousDisplayedImages.push(Image.imgElement1);
-//   previousDisplayedImages.push(Image.imgElement2);
-//   previousDisplayedImages.push(Image.imgElement3);
-// }
+if(previousDisplayedImages.length == 0) {
+  previousDisplayedImages.push(Image.imgElement1);
+  previousDisplayedImages.push(Image.imgElement2);
+  previousDisplayedImages.push(Image.imgElement3);
+}
 
-// if(selectionCounter == 25) {
-//   Image.imgElement1.removeEventListener('click', Image.imageClicked);
-//   Image.imgElement2.removeEventListener('click', Image.imageClicked);
-//   Image.imgElement3.removeEventListener('click', Image.imageClicked);
-// }
+if(selectionCounter == 25) {
+  Image.imgElement1.removeEventListener('click', Image.imageClicked);
+  Image.imgElement2.removeEventListener('click', Image.imageClicked);
+  Image.imgElement3.removeEventListener('click', Image.imageClicked);
+}
 
 // Test to see why event listener not working.
-var randomIndex = Image.randomNum();
-var randomImage = Image.allImages[randomIndex];
-var myImage1 = Image.allImages[randomIndex];
+// var randomIndex = Image.randomNum();
+// var randomImage = Image.allImages[randomIndex];
+// var myImage1 = Image.allImages[randomIndex];
 
-randomIndex = Image.randomNum();
-randomImage = Image.allImages[randomIndex];
-var myImage2 = Image.allImages[randomIndex];
+// randomIndex = Image.randomNum();
+// randomImage = Image.allImages[randomIndex];
+// var myImage2 = Image.allImages[randomIndex];
 
-randomIndex = Image.randomNum();
-randomImage = Image.allImages[randomIndex];
-var myImage3 = Image.allImages[randomIndex];
+// randomIndex = Image.randomNum();
+// randomImage = Image.allImages[randomIndex];
+// var myImage3 = Image.allImages[randomIndex];
 
-Image.imgElement1.alt = myImage1.altText;
-Image.imgElement1.src = myImage1.filePath;
+// Image.imgElement1.alt = myImage1.altText;
+// Image.imgElement1.src = myImage1.filePath;
 
-Image.imgElement2.alt = myImage2.altText;
-Image.imgElement2.src = myImage2.filePath;
+// Image.imgElement2.alt = myImage2.altText;
+// Image.imgElement2.src = myImage2.filePath;
 
-Image.imgElement3.alt = myImage3.altText;
-Image.imgElement3.src = myImage3.filePath;
+// Image.imgElement3.alt = myImage3.altText;
+// Image.imgElement3.src = myImage3.filePath;
 
 // end of test
 
