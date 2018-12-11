@@ -144,4 +144,8 @@ Image.imgElement1.addEventListener('click', Image.imageClicked);
 Image.imgElement2.addEventListener('click', Image.imageClicked);
 Image.imgElement3.addEventListener('click', Image.imageClicked);
 
+// Image.imgElement1.addEventListener('click', Image.imageClicked);
+// Image.imgElement2.addEventListener('click', Image.imageClicked);
+// Image.imgElement3.addEventListener('click', Image.imageClicked);
+
 //Do calculations
