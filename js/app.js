@@ -19,6 +19,8 @@ Image.allAltTexts = [];
 
 Image.totalVotes = [];
 
+Image.parsedVotes = JSON.parse( localStorage.getItem('voteResults') );
+
 // Constructor function to create an image instance
 function Image(name, filePath, description) {
   this.imageName = name;
@@ -30,28 +32,29 @@ function Image(name, filePath, description) {
   Image.allAltTexts.push(this.altText);
 }
 
-// Create three image instances
-new Image('bag', '../img/bag.jpg', 'An r2-d2 roller bag.');
-new Image('banana', '../img/banana.jpg', 'A banana slicer.');
-new Image('bathroom', '../img/bathroom.jpg', 'A toilet paper holder.');
-new Image('boots', '../img/boots.jpg', 'Yellow rain boots.');
-new Image('breakfast', '../img/breakfast.jpg', 'Breakfast oven.');
-new Image('bubblegum', '../img/bubblegum.jpg', 'Meatball bubblegum.');
-new Image('chair', '../img/chair.jpg', 'Red chair.');
-new Image('cthulhu', '../img/cthulhu.jpg', 'Alien man.');
-new Image('dogDuck', '../img/dog-duck.jpg', 'Dog duck mask.');
-new Image('dragon', '../img/dragon.jpg', 'Dragon meat.');
-new Image('pen', '../img/pen.jpg', 'Utensil pens.');
-new Image('pet-sweep', '../img/pet-sweep.jpg', 'Pet dust boots.');
-// new Image('README', '../img/README.md', 'Read me.');
-new Image('scissors', '../img/scissors.jpg', 'Pizza scissors.');
-new Image('shark', '../img/shark.jpg', 'Shark sleeping bag.');
-new Image('sweep', '../img/sweep.png', 'Baby sweeper sleeper.');
-new Image('tauntaun', '../img/tauntaun.jpg', 'Cool sleeping bag.');
-new Image('unicorn', '../img/unicorn.jpg', 'Unicorn meat.');
-new Image('usb', '../img/usb.gif', 'USB lizard tail.');
-new Image('water-can', '../img/water-can.jpg', 'Curved watering can.');
-new Image('wine-glass', '../img/wine-glass.jpg', 'Side way wine glass.');
+Image.allImages = Image.parsedVotes || [
+  // Create three image instances
+  new Image('bag', '../img/bag.jpg', 'An r2-d2 roller bag.'),
+  new Image('banana', '../img/banana.jpg', 'A banana slicer.'),
+  new Image('bathroom', '../img/bathroom.jpg', 'A toilet paper holder.'),
+  new Image('boots', '../img/boots.jpg', 'Yellow rain boots.'),
+  new Image('breakfast', '../img/breakfast.jpg', 'Breakfast oven.'),
+  new Image('bubblegum', '../img/bubblegum.jpg', 'Meatball bubblegum.'),
+  new Image('chair', '../img/chair.jpg', 'Red chair.'),
+  new Image('cthulhu', '../img/cthulhu.jpg', 'Alien man.'),
+  new Image('dogDuck', '../img/dog-duck.jpg', 'Dog duck mask.'),
+  new Image('dragon', '../img/dragon.jpg', 'Dragon meat.'),
+  new Image('pen', '../img/pen.jpg', 'Utensil pens.'),
+  new Image('pet-sweep', '../img/pet-sweep.jpg', 'Pet dust boots.'),
+  new Image('scissors', '../img/scissors.jpg', 'Pizza scissors.'),
+  new Image('shark', '../img/shark.jpg', 'Shark sleeping bag.'),
+  new Image('sweep', '../img/sweep.png', 'Baby sweeper sleeper.'),
+  new Image('tauntaun', '../img/tauntaun.jpg', 'Cool sleeping bag.'),
+  new Image('unicorn', '../img/unicorn.jpg', 'Unicorn meat.'),
+  new Image('usb', '../img/usb.gif', 'USB lizard tail.'),
+  new Image('water-can', '../img/water-can.jpg', 'Curved watering can.'),
+  new Image('wine-glass', '../img/wine-glass.jpg', 'Side way wine glass.'),
+];
 
 // Call back function to handle when click event is triggered.
 Image.handleClick = function(event) {
@@ -72,6 +75,8 @@ Image.handleClick = function(event) {
     // Display chart here.
     Image.updateVotes();
     Image.displayChart();
+
+    localStorage.setItem('voteResults', JSON.stringify(Image.totalVotes));
   } else {
     // Copy images just displayed to previously displayed images array
     Image.previousDisplayedImages = [];
