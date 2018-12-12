@@ -3,10 +3,21 @@
 Image.imgElement1 = document.getElementById('product-pic1');
 Image.imgElement2 = document.getElementById('product-pic2');
 Image.imgElement3 = document.getElementById('product-pic3');
+Image.chartContext = document.getElementById('results-chart');
 
-Image.allImages = [];
-var previousDisplayedImages = [];
-var selectionCounter = 0;  // User gets 25 selections.
+// Define the array this way so it takes less memory.  It is associated with the Image 
+// constructor function.
+Image.allImages = []; 
+
+Image.previousDisplayedImages = [];
+
+Image.imagesToRender = [];
+
+Image.totalClicks = 0;  // User gets 25 selections.
+
+Image.allAltTexts = [];
+
+Image.totalVotes = [];
 
 // Constructor function to create an image instance
 function Image(name, filePath, description) {
@@ -16,9 +27,7 @@ function Image(name, filePath, description) {
   this.numberOfTimesClicked = 0;
   this.numberOfTimesDisplayed = 0;
   Image.allImages.push(this);
-  this.imageDisplayed = function() {
-    this.numberOfTimesDisplayed++;
-  };
+  Image.allAltTexts.push(this.altText);
 }
 
 // Create three image instances
@@ -44,128 +53,115 @@ new Image('usb', '../img/usb.gif', 'USB lizard tail.');
 new Image('water-can', '../img/water-can.jpg', 'Curved watering can.');
 new Image('wine-glass', '../img/wine-glass.jpg', 'Side way wine glass.');
 
-Image.prototype.imageClicked = function() {
-  this.numberOfTimesClicked++;
-  selectionCounter++;
+// Call back function to handle when click event is triggered.
+Image.handleClick = function(event) {
+  Image.totalClicks++;
 
-  alert('Incremented selectionCounter: ' + selectionCounter);
+  // Increment the number of times image was clicked.
+  for(var i = 0; i < Image.allImages.length; i++) {
+    if(event.target.alt === Image.allImages[i].altText) {
+      Image.allImages[i].numberOfTimesClicked++;
+      break;
+    }
+  }
+  
+  if(Image.totalClicks === 25) {
+    Image.imgElement1.removeEventListener('click', Image.handleClick);
+    Image.imgElement2.removeEventListener('click', Image.handleClick);
+    Image.imgElement3.removeEventListener('click', Image.handleClick);
+    // Display chart here.
+    Image.displayChart();
+  } else {
+    // Copy images just displayed to previously displayed images array
+    Image.previousDisplayedImages = [];
+    for (i = 0; i < Image.imagesToRender.length; i++) {
+      Image.previousDisplayedImages.push(Image.imagesToRender[i]);
+    }
 
-  // Clear previousDisplayedImages array.
-  previousDisplayedImages = [];
+    // Clear imagesToRender array.
+    Image.imagesToRender = [];
 
-  // Push images just displayed onto previousDislayedImages array.
-  previousDisplayedImages.push(Image.imgElement1);
-  previousDisplayedImages.push(Image.imgElement2);
-  previousDisplayedImages.push(Image.imgElement3);
-
-  //Image.renderImages();
+    // Get another set of three images.
+    Image.renderImages();
+  }
 };
 
-// Randomly generate a number
+// Randomly generate a number between 1 and the length of the allImages array.
 Image.randomNum = function() {
   var random = Math.random() * Image.allImages.length;
   var roundedDown = Math.floor(random);
   return roundedDown;
 };
 
-// Retrieves three images that are not duplicate with any images displayed 
-// immediately before.
-Image.getImageNotPreviouslyDisplayed = function() {
+// Creates an array of distinct images to render.
+Image.generateImagesToRender = function() {
   var randomIndex = Image.randomNum();
   var randomImage = Image.allImages[randomIndex];
 
-  if(previousDisplayedImages.length > 0) {
-    //Check that image1 is not in previously displayed images array.
-    for(var i = 0; i < previousDisplayedImages.length; i++) {
-      if(randomImage.filePath === previousDisplayedImages[i].filePath) {
-        randomIndex = Image.randomNum();
-        randomImage = Image.allImages[randomIndex];
-        i = 0; // Start over at the beginning of array
+  while(Image.imagesToRender.length < 3) {
+    if(! Image.imagesToRender.includes(randomImage)) {
+      if(! Image.previousDisplayedImages.includes(randomImage)) {
+        Image.imagesToRender.push(randomImage);
       }
-    } 
+    }
+    // Found a duplicate.  Get another random image.
+    randomIndex = Image.randomNum();
+    randomImage = Image.allImages[randomIndex];
   } 
-
-  return randomImage;
 };
 
-// Display three unique images
+// Retrieves three images that are not duplicates of any images displayed previously.
 Image.renderImages = function() {
-  // Retrieves three images that are not duplicate with any images displayed 
-  // immediately before.
-  var randomImage1 = Image.getImageNotPreviouslyDisplayed();
-  var randomImage2 = Image.getImageNotPreviouslyDisplayed();
-  var randomImage3 = Image.getImageNotPreviouslyDisplayed();
+  Image.generateImagesToRender();
+  
+  Image.imgElement1.alt = Image.imagesToRender[0].altText;
+  Image.imgElement1.src = Image.imagesToRender[0].filePath;
 
-  // Now check for duplicates.
-  var done = false;
-  while(! done) {
-    if(randomImage1 === randomImage2) {
-      randomImage1 = Image.getImageNotPrevioslyDisplayed();
-    } else if(randomImage2 === randomImage3) {
-      randomImage3 = Image.getImageNotPrevioslyDisplayed();
-    } else if(randomImage1 === randomImage3) {
-      randomImage3 = Image.getImageNotPrevioslyDisplayed();
-    } else {
-      done = true;
-    }
+  Image.imgElement2.alt = Image.imagesToRender[1].altText;
+  Image.imgElement2.src = Image.imagesToRender[1].filePath;
+
+  Image.imgElement3.alt = Image.imagesToRender[2].altText;
+  Image.imgElement3.src = Image.imagesToRender[2].filePath;
+
+  // Increment counter that tracks number of times displayed
+  Image.imagesToRender[0].numberOfTimesDisplayed++;
+  Image.imagesToRender[1].numberOfTimesDisplayed++;
+  Image.imagesToRender[2].numberOfTimesDisplayed++;
+};
+
+// Populates total votes array with data used for rendering the chart .
+Image.updateVotes = function() {
+  for(var i = 0; i < Image.allImages.length; i++) {
+    Image.totalVotes[i] = Image.allImages[i].numberOfTimesClicked;
   }
-
-  Image.imgElement1.alt = randomImage1.altText;
-  Image.imgElement1.src = randomImage1.filePath;
-
-  Image.imgElement2.alt = randomImage2.altText;
-  Image.imgElement2.src = randomImage2.filePath;
-
-  Image.imgElement3.alt = randomImage3.altText;
-  Image.imgElement3.src = randomImage3.filePath;
-
-  randomImage1.numberOfTimesDisplayed++;
-  randomImage2.numberOfTimesDisplayed++;
-  randomImage3.numberOfTimesDisplayed++;
-
-  console.log('Just rendedred images.');
 };
 
 Image.renderImages();
 
-if(previousDisplayedImages.length == 0) {
-  previousDisplayedImages.push(Image.imgElement1);
-  previousDisplayedImages.push(Image.imgElement2);
-  previousDisplayedImages.push(Image.imgElement3);
-}
+Image.imgElement1.addEventListener('click', Image.handleClick);
+Image.imgElement2.addEventListener('click', Image.handleClick);
+Image.imgElement3.addEventListener('click', Image.handleClick);
 
-if(selectionCounter == 25) {
-  Image.imgElement1.removeEventListener('click', Image.imageClicked);
-  Image.imgElement2.removeEventListener('click', Image.imageClicked);
-  Image.imgElement3.removeEventListener('click', Image.imageClicked);
-}
-
-// Test to see why event listener not working.
-// var randomIndex = Image.randomNum();
-// var randomImage = Image.allImages[randomIndex];
-// var myImage1 = Image.allImages[randomIndex];
-
-// randomIndex = Image.randomNum();
-// randomImage = Image.allImages[randomIndex];
-// var myImage2 = Image.allImages[randomIndex];
-
-// randomIndex = Image.randomNum();
-// randomImage = Image.allImages[randomIndex];
-// var myImage3 = Image.allImages[randomIndex];
-
-// Image.imgElement1.alt = myImage1.altText;
-// Image.imgElement1.src = myImage1.filePath;
-
-// Image.imgElement2.alt = myImage2.altText;
-// Image.imgElement2.src = myImage2.filePath;
-
-// Image.imgElement3.alt = myImage3.altText;
-// Image.imgElement3.src = myImage3.filePath;
-
-// end of test
-
-Image.imgElement1.addEventListener('click', Image.imageClicked);
-Image.imgElement2.addEventListener('click', Image.imageClicked);
-Image.imgElement3.addEventListener('click', Image.imageClicked);
-
-//Do calculations
+// Displays a bar chart of the total number of clicks of products.
+Image.displayChart = function() {
+  new Chart(Image.chartContext, { // eslint-disable-line
+    type: 'bar',
+    data: {
+      labels: Image.allAltTexts, // label for each individual bar
+      datasets: [{
+        label: 'Votes Per Product',
+        data: Image.totalVotes, // an array of number of votes per goat
+        backgroundColor: ['red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple'],
+      }],
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          tick: {
+            beginAtZero: true,
+          }
+        }]
+      }
+    }
+  });
+};
