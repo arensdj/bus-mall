@@ -5,7 +5,6 @@ Image.imgElement1 = document.getElementById('product-pic1');
 Image.imgElement2 = document.getElementById('product-pic2');
 Image.imgElement3 = document.getElementById('product-pic3');
 
-
 // Image.imgDisplay = document.getElementById('')
 
 // Define the array this way so it takes less memory.  It is associated with the Image 
@@ -26,7 +25,6 @@ function Image(name, filePath, description) {
   this.numberOfTimesClicked = 0;
   this.numberOfTimesDisplayed = 0;
   Image.allImages.push(this);
-
 }
 
 // Create three image instances
@@ -54,30 +52,34 @@ new Image('wine-glass', '../img/wine-glass.jpg', 'Side way wine glass.');
 
 // Call back function to handle when click event is triggered.
 Image.handleClick = function(event) {
-  // console.log('inside handleClick');
   Image.totalClicks++;
 
   // Increment the number of times image was clicked.
   for(var i = 0; i < Image.allImages.length; i++) {
-    if(event.target.alt === Image.allImages[i].alt) {
+    if(event.target.alt === Image.allImages[i].altText) {
       Image.allImages[i].numberOfTimesClicked++;
       break;
     }
   }
   
-  // alert('Incremented selectionCounter: ' + Image.totalClicks);
-  // console.log('Incremented total clicks: ' + Image.totalClicks);
+  if(Image.totalClicks === 25) {
+    Image.imgElement1.removeEventListener('click', Image.handleClick);
+    Image.imgElement2.removeEventListener('click', Image.handleClick);
+    Image.imgElement3.removeEventListener('click', Image.handleClick);
+    // Display chart here.
+  } else {
+    // Copy images just displayed to previously displayed images array
+    Image.previousDisplayedImages = [];
+    for (i = 0; i < Image.imagesToRender.length; i++) {
+      Image.previousDisplayedImages.push(Image.imagesToRender[i]);
+    }
 
-  // Copy images just displayed to previously displayed images array
-  for (i = 0; i < Image.imagesToRender.length; i++) {
-    Image.previousDisplayedImages.push(Image.imagesToRender[i]);
+    // Clear imagesToRender array.
+    Image.imagesToRender = [];
+
+    // Get another set of three images.
+    Image.renderImages();
   }
-
-  // Clear imagesToRender array.
-  Image.imagesToRender = [];
-
-  // Get another set of three images.
-  Image.renderImages();
 };
 
 // Randomly generate a number between 1 and the length of the allImages array.
@@ -87,30 +89,25 @@ Image.randomNum = function() {
   return roundedDown;
 };
 
+// Creates an array of distinct images to render.
 Image.generateImagesToRender = function() {
-  // Image.previousDisplayedImages = Image.imagesToRender;
   var randomIndex = Image.randomNum();
   var randomImage = Image.allImages[randomIndex];
 
   while(Image.imagesToRender.length < 3) {
     if(! Image.imagesToRender.includes(randomImage)) {
       if(! Image.previousDisplayedImages.includes(randomImage)) {
-      //if(randomImage.filePath === Image.previousDisplayedImages[i].filePath) {
         Image.imagesToRender.push(randomImage);
       }
     }
-    // } else {
     // Found a duplicate.  Get another random image.
     randomIndex = Image.randomNum();
     randomImage = Image.allImages[randomIndex];
-    // }
   } 
 };
 
-// Display three unique images
+// Retrieves three images that are not duplicates of any images displayed previously.
 Image.renderImages = function() {
-  // Retrieves three images that are not duplicate with any images displayed 
-  // immediately before.
   Image.generateImagesToRender();
   
   Image.imgElement1.alt = Image.imagesToRender[0].altText;
@@ -126,20 +123,10 @@ Image.renderImages = function() {
   Image.imagesToRender[0].numberOfTimesDisplayed++;
   Image.imagesToRender[1].numberOfTimesDisplayed++;
   Image.imagesToRender[2].numberOfTimesDisplayed++;
-
-  console.log('Just rendered images.');
 };
 
 Image.renderImages();
 
-if(Image.totalClicks === 25) {
-  Image.imgElement1.removeEventListener('click', Image.handleClick);
-  Image.imgElement2.removeEventListener('click', Image.handleClick);
-  Image.imgElement3.removeEventListener('click', Image.handleClick);
-}
-
 Image.imgElement1.addEventListener('click', Image.handleClick);
 Image.imgElement2.addEventListener('click', Image.handleClick);
 Image.imgElement3.addEventListener('click', Image.handleClick);
-
-//Do calculations
