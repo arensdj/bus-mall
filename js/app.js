@@ -70,6 +70,7 @@ Image.handleClick = function(event) {
     Image.imgElement2.removeEventListener('click', Image.handleClick);
     Image.imgElement3.removeEventListener('click', Image.handleClick);
     // Display chart here.
+    Image.updateVotes();
     Image.displayChart();
   } else {
     // Copy images just displayed to previously displayed images array
@@ -84,13 +85,6 @@ Image.handleClick = function(event) {
     // Get another set of three images.
     Image.renderImages();
   }
-};
-
-// Randomly generate a number between 1 and the length of the allImages array.
-Image.randomNum = function() {
-  var random = Math.random() * Image.allImages.length;
-  var roundedDown = Math.floor(random);
-  return roundedDown;
 };
 
 // Creates an array of distinct images to render.
@@ -108,6 +102,13 @@ Image.generateImagesToRender = function() {
     randomIndex = Image.randomNum();
     randomImage = Image.allImages[randomIndex];
   } 
+};
+
+// Randomly generate a number between 1 and the length of the allImages array.
+Image.randomNum = function() {
+  var random = Math.random() * Image.allImages.length;
+  var roundedDown = Math.floor(random);
+  return roundedDown;
 };
 
 // Retrieves three images that are not duplicates of any images displayed previously.
