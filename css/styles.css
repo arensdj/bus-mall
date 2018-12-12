@@ -1,18 +1,33 @@
 body {
   clear: all;
+  background-color: gray;
 }
 .image-display {
   float: left;
   margin-left: 25px;
 }
+/* .instructions, p {
+  border: 2px solid orange;
+} */
 ul li {
   list-style: none;
   display: inline-block;
-  margin: 30px 30px 30px 0px;
-  padding-left: 50px;
+  margin: 25px 25px 25px 0px;
+  padding-left: 100px;
 }
 h1 {
   color: blue;
   font-size: 20px;
   text-align: center;
+}
+p {
+  text-indent: 20px;
+  /* color: gray; */
+  font-size: 20px;
+  margin-left: 100px;
+  margin-right: 150px;
+}
+img {
+  height: 375px;
+  width: 300px;
 }

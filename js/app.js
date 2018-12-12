@@ -151,15 +151,24 @@ Image.displayChart = function() {
       labels: Image.allAltTexts, // label for each individual bar
       datasets: [{
         label: 'Votes Per Product',
-        data: Image.totalVotes, // an array of number of votes per goat
+        data: Image.totalVotes, // an array of number of votes per image
         backgroundColor: ['red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple'],
       }],
     },
     options: {
       scales: {
         yAxes: [{
-          tick: {
+          ticks: {
             beginAtZero: true,
+            stepSize: 1,
+          }
+        }],
+        xAxes: [{
+          ticks: {
+            stepSize: 1,
+            autoskip: false,
+            minRotation: 90,
+            maxRotation: 90
           }
         }]
       }
