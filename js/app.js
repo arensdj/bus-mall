@@ -1,11 +1,9 @@
 'use strict';
 
-Image.sectionEl = document.getElementById('image-section');
 Image.imgElement1 = document.getElementById('product-pic1');
 Image.imgElement2 = document.getElementById('product-pic2');
 Image.imgElement3 = document.getElementById('product-pic3');
-
-// Image.imgDisplay = document.getElementById('')
+Image.chartContext = document.getElementById('results-chart');
 
 // Define the array this way so it takes less memory.  It is associated with the Image 
 // constructor function.
@@ -17,6 +15,10 @@ Image.imagesToRender = [];
 
 Image.totalClicks = 0;  // User gets 25 selections.
 
+Image.allAltTexts = [];
+
+Image.totalVotes = [];
+
 // Constructor function to create an image instance
 function Image(name, filePath, description) {
   this.imageName = name;
@@ -25,6 +27,7 @@ function Image(name, filePath, description) {
   this.numberOfTimesClicked = 0;
   this.numberOfTimesDisplayed = 0;
   Image.allImages.push(this);
+  Image.allAltTexts.push(this.altText);
 }
 
 // Create three image instances
@@ -67,6 +70,7 @@ Image.handleClick = function(event) {
     Image.imgElement2.removeEventListener('click', Image.handleClick);
     Image.imgElement3.removeEventListener('click', Image.handleClick);
     // Display chart here.
+    Image.displayChart();
   } else {
     // Copy images just displayed to previously displayed images array
     Image.previousDisplayedImages = [];
@@ -125,8 +129,39 @@ Image.renderImages = function() {
   Image.imagesToRender[2].numberOfTimesDisplayed++;
 };
 
+// Populates total votes array with data used for rendering the chart .
+Image.updateVotes = function() {
+  for(var i = 0; i < Image.allImages.length; i++) {
+    Image.totalVotes[i] = Image.allImages[i].numberOfTimesClicked;
+  }
+};
+
 Image.renderImages();
 
 Image.imgElement1.addEventListener('click', Image.handleClick);
 Image.imgElement2.addEventListener('click', Image.handleClick);
 Image.imgElement3.addEventListener('click', Image.handleClick);
+
+// Displays a bar chart of the total number of clicks of products.
+Image.displayChart = function() {
+  new Chart(Image.chartContext, { // eslint-disable-line
+    type: 'bar',
+    data: {
+      labels: Image.allAltTexts, // label for each individual bar
+      datasets: [{
+        label: 'Votes Per Product',
+        data: Image.totalVotes, // an array of number of votes per goat
+        backgroundColor: ['red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple'],
+      }],
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          tick: {
+            beginAtZero: true,
+          }
+        }]
+      }
+    }
+  });
+};
