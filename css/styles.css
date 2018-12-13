@@ -16,6 +16,7 @@ h1 {
   padding: 15px;
   height: 345px;
   width: 300px;
+  visibility: hidden;
   border: 2px solid black;
 }
 .image-section {

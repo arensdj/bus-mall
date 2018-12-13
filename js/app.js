@@ -61,6 +61,10 @@ Image.displayVoteResults = function() {
     liEl.textContent += ' votes.';
     Image.sectionElement.appendChild(liEl);
   }     
+  // Set the section containing the results report to be visible.  It is hidden when the
+  // images are rendered and user is making selections.  When vote results are to be
+  // displayed, the report displays on the left side of the images.
+  document.getElementById('vote-results').style.visibility = 'visible';
 };
 
 // Creates an array of distinct images to render.
