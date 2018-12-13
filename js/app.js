@@ -6,18 +6,13 @@ Image.imgElement3 = document.getElementById('product-pic3');
 Image.chartContext = document.getElementById('results-chart');
 Image.sectionElement = document.getElementById('vote-results');
 
-// Define the array this way so it takes less memory.  It is associated with the Image 
+// Define the arrays this way so it takes less memory.  It is associated with the Image 
 // constructor function.
-Image.allImages = []; 
-
-Image.previousDisplayedImages = [];
-
-Image.imagesToRender = [];
-
-Image.totalClicks = 0;  // User gets 25 selections.
-
 Image.allAltTexts = [];
-
+Image.allImages = []; 
+Image.imagesToRender = [];
+Image.previousDisplayedImages = [];
+Image.totalClicks = 0;  // User gets 25 selections.
 Image.totalVotes = [];
 
 Image.parsedVotes = JSON.parse( localStorage.getItem('voteResults') );
@@ -31,14 +26,13 @@ function Image(name, filePath, description) {
   this.numberOfTimesClicked = 0;
   this.numberOfTimesDisplayed = 0;
   Image.allImages.push(this);
-  // Image.allAltTexts.push(this.altText);
 }
 
 Image.allImages = Image.parsedVotes || [
   // Create three image instances
   new Image('bag', './img/bag.jpg', 'R2-d2 roller bag'),
   new Image('banana', './img/banana.jpg', 'Banana slicer'),
-  new Image('bathroom', './img/bathroom.jpg', 'Roilet paper holder'),
+  new Image('bathroom', './img/bathroom.jpg', 'Toilet paper holder'),
   new Image('boots', './img/boots.jpg', 'Yellow rain boots'),
   new Image('breakfast', './img/breakfast.jpg', 'Breakfast oven'),
   new Image('bubblegum', './img/bubblegum.jpg', 'Meatball bubblegum'),
@@ -62,11 +56,28 @@ Image.displayVoteResults = function() {
   for(var i = 0; i < Image.allImages.length; i++) {
     var liEl = document.createElement('li');
     liEl.textContent = Image.allImages[i].altText;
-    liEl.textContent += " had a total of ";
+    liEl.textContent += ' had ';
     liEl.textContent += Image.allImages[i].numberOfTimesClicked;
-    liEl.textContent += " votes.";
+    liEl.textContent += ' votes.';
     Image.sectionElement.appendChild(liEl);
-  }  
+  }     
+};
+
+// Creates an array of distinct images to render.
+Image.generateImagesToRender = function() {
+  var randomIndex = Image.randomNum();
+  var randomImage = Image.allImages[randomIndex];
+
+  while(Image.imagesToRender.length < 3) {
+    if(! Image.imagesToRender.includes(randomImage)) {
+      if(! Image.previousDisplayedImages.includes(randomImage)) {
+        Image.imagesToRender.push(randomImage);
+      }
+    }
+    // Found a duplicate.  Get another random image.
+    randomIndex = Image.randomNum();
+    randomImage = Image.allImages[randomIndex];
+  } 
 };
 
 // Call back function to handle when click event is triggered.
@@ -104,23 +115,6 @@ Image.handleClick = function(event) {
     // Get another set of three images.
     Image.renderImages();
   }
-};
-
-// Creates an array of distinct images to render.
-Image.generateImagesToRender = function() {
-  var randomIndex = Image.randomNum();
-  var randomImage = Image.allImages[randomIndex];
-
-  while(Image.imagesToRender.length < 3) {
-    if(! Image.imagesToRender.includes(randomImage)) {
-      if(! Image.previousDisplayedImages.includes(randomImage)) {
-        Image.imagesToRender.push(randomImage);
-      }
-    }
-    // Found a duplicate.  Get another random image.
-    randomIndex = Image.randomNum();
-    randomImage = Image.allImages[randomIndex];
-  } 
 };
 
 // Randomly generate a number between 1 and the length of the allImages array.
@@ -175,7 +169,6 @@ Image.displayChart = function() {
     type: 'bar',
     data: {
       labels: Image.allAltTexts, // label for each individual bar
-      // labels: Image.totalVotes, // label for each individual bar
       datasets: [{
         label: 'Votes Per Product',
         data: Image.totalVotes, // an array of number of votes per image
