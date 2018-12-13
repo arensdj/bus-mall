@@ -2,20 +2,29 @@
 <html>
   <header>
     <title>Bus Mall</title>
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface" rel="stylesheet">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/styles.css">
   </header>
   <body>
-    <h1>Click the product that you most likely purchase.</h1>
-      <section id="image-section">
-        <ul>
-          <li><img id="product-pic1" height="375px" width="300px" src="" alt=""></li>
-          <li><img id="product-pic2" height="375px" width="300px" src="" alt=""></li>
-          <li><img id="product-pic3" height="375px" width="300px" src="" alt=""></li>
-        </ul>
-      </section>
+    <header>
+      <h1>Welcome to BusMall</h1>
+    </header>
+    <section id="vote-results"></section>
+    <section id="image-section">
+      <ul>
+        <li><img id="product-pic1" src="" alt=""></li>
+        <li><img id="product-pic2" src="" alt=""></li>
+        <li><img id="product-pic3" src="" alt=""></li>
+      </ul>
     </section>
-    
+    <section>
+      <p>BusMall is a startup company looking to publish a catalog of assorted high-markup products.  These catalogs will be placed in Puget Sound regional transit system buses for passengers to have as a mental escape from the long travel times.  BusMall would like you to participate in a market analysis by helping them understand which items to feature in their catalog.</p><br>
+      <p>Please click on one product from the three displayed images that you would most likely purchase.  After your first selection, three new images will appear.  This will happen a total of 25 times.</p>
+    </section>
+
+    <!-- <section id="vote-results">
+         <ul></ul> -->
     <canvas id="results-chart"></canvas>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <script src="./js/app.js"></script>  
