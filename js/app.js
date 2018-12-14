@@ -56,7 +56,7 @@ Image.displayVoteResults = function() {
   for(var i = 0; i < Image.allImages.length; i++) {
     var liEl = document.createElement('li');
     liEl.textContent = Image.allImages[i].altText;
-    liEl.textContent += ' had ';
+    liEl.textContent += ' received ';
     liEl.textContent += Image.allImages[i].numberOfTimesClicked;
     liEl.textContent += ' votes.';
     Image.sectionElement.appendChild(liEl);
