@@ -58,7 +58,11 @@ Image.displayVoteResults = function() {
     liEl.textContent = Image.allImages[i].altText;
     liEl.textContent += ' received ';
     liEl.textContent += Image.allImages[i].numberOfTimesClicked;
-    liEl.textContent += ' votes.';
+    if (Image.allImages[i].numberOfTimesClicked > 1) {
+      liEl.textContent += ' votes.';
+    } else {
+      liEl.textContent += ' vote.';
+    }
     Image.sectionElement.appendChild(liEl);
   }     
   // Set the section containing the results report to be visible.  It is hidden when the
@@ -176,7 +180,7 @@ Image.displayChart = function() {
       datasets: [{
         label: 'Votes Per Product',
         data: Image.totalVotes, // an array of number of votes per image
-        backgroundColor: ['red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple', 'red', 'blue', 'green', 'orange', 'purple'],
+        backgroundColor: ['#81a0d3', '#4672ba', '#1c4ea0', '#042c6d', '#81a0d3', '#4672ba', '#1c4ea0', '#042c6d', '#81a0d3', '#4672ba', '#1c4ea0', '#042c6d', '#81a0d3', '#4672ba', '#1c4ea0', '#042c6d', '#81a0d3', '#4672ba', '#1c4ea0', '#042c6d'],
       }],
     },
     options: {
